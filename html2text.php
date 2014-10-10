@@ -26,10 +26,15 @@
  * </ul>
  *
  * @param string html the input HTML
+ * @param boolean partial states if provided HTML is partial or not. Partial means without head / body sections. If null, function tries to autodetect.
  * @return string the HTML converted, as best as possible, to text
  * @throws Html2TextException if the HTML could not be loaded as a {@link DOMDocument}
  */
-function convert_html_to_text($html) {
+function convert_html_to_text($html, $partial = null) {
+        if ($partial || $partial === null && mb_strpos($html, '<html ') === false) {
+            $html = '<html lang="en"><head><meta charset="UTF-8" /></head><body>' . $html .'</body>';
+        }	
+	
 	$html = fix_newlines($html);
 
 	$doc = new DOMDocument();
